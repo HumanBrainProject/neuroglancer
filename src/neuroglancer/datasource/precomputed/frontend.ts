@@ -336,7 +336,13 @@ function getDefaultCoordinateSpace() {
 }
 
 async function getMeshSource(chunkManager: ChunkManager, url: string) {
-  const metadata = await getMeshMetadata(chunkManager, url);
+  let metadata
+  try{
+    metadata = await getMeshMetadata(chunkManager, url);
+  } catch (e) {
+    
+  }
+  
   if (metadata === undefined) {
     return {source: getLegacyMeshSource(chunkManager, {url, lod: 0}), transform: mat4.create()};
   }
