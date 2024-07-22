@@ -16,6 +16,7 @@
 
 import {CancellationToken, uncancelableToken} from 'neuroglancer/util/cancellation';
 import {Uint64} from 'neuroglancer/util/uint64';
+import { getRandomHexString } from './random';
 
 export class HttpError extends Error {
   url: string;
@@ -50,6 +51,9 @@ export class HttpError extends Error {
 export async function fetchOk(input: RequestInfo, init?: RequestInit): Promise<Response> {
   let response: Response;
   try {
+    if (typeof input === "string") {
+      input = transformGBucket(input)
+    }
     response = await fetch(input, init);
   } catch (error) {
     if (error instanceof TypeError) {
@@ -125,6 +129,8 @@ export function parseUrl(url: string): {protocol: string, host: string, path: st
   return {protocol: match[1], host: match[2], path: match[3]};
 }
 
+const hex = getRandomHexString()
+
 /**
  * Parses a URL that may have a special protocol designation into a real URL.
  *
@@ -133,9 +139,19 @@ export function parseUrl(url: string): {protocol: string, host: string, path: st
  * The special 'gs://bucket/path' syntax is supported for accessing Google Storage buckets.
  */
 export function parseSpecialUrl(url: string): string {
+  return url
+  // const u = parseUrl(url);
+  // if (u.protocol === 'gs') {
+  //   return `https://storage.googleapis.com/${u.host}${u.path}`;
+  // }
+  // return url;
+}
+
+function transformGBucket(url: string): string {
   const u = parseUrl(url);
   if (u.protocol === 'gs') {
-    return `https://storage.googleapis.com/${u.host}${u.path}`;
+    const path = encodeURIComponent(u.path.substring(1))
+    return `https://www.googleapis.com/storage/v1/b/${u.host}/o/${path}?alt=media&neuroglancer=${hex}`;
   }
   return url;
 }
