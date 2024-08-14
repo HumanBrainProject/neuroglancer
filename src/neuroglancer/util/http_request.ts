@@ -121,12 +121,12 @@ export function getByteRangeHeader(startOffset: Uint64|number, endOffset: Uint64
 }
 
 export function parseUrl(url: string): {protocol: string, host: string, path: string} {
-  const urlProtocolPattern = /^([^:\/]+):\/\/([^\/]+)((?:\/.*)?)$/;
+  const urlProtocolPattern = /^(blob:)?([^:\/]+):\/\/([^\/]+)((?:\/.*)?)$/;
   let match = url.match(urlProtocolPattern);
   if (match === null) {
     throw new Error(`Invalid URL: ${JSON.stringify(url)}`);
   }
-  return {protocol: match[1], host: match[2], path: match[3]};
+  return {protocol: match[2], host: match[3], path: match[4]};
 }
 
 const hex = getRandomHexString()
