@@ -65,6 +65,18 @@ export function createHomogeneousScaleMatrix<T extends TypedArray>(
   return m;
 }
 
+export function createHomogeneousTranslationMatrix<T extends TypedArray>(
+  c: {new (length: number): T}, translation: ArrayLike<number>, square = true): T {
+const rank = translation.length;
+const stride = square ? rank + 1 : rank;
+const m = createIdentity(c, stride, rank + 1);
+for (let i = 0; i < rank; ++i) {
+  m[stride * rank + i] = translation[i];
+}
+return m;
+}
+
+
 export function isIdentity<T extends TypedArray>(a: T, lda: number, n: number) {
   for (let i = 0; i < n; ++i) {
     for (let j = 0; j < n; ++j) {

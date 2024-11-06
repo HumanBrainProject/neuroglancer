@@ -265,6 +265,7 @@ function getShaderCodeForDataType(dataType: DataType): ShaderCodePart {
     case DataType.FLOAT32:
       return glsl_float;
   }
+  throw new Error("Uncaught datatype")
 }
 
 function getAccessorFunction(

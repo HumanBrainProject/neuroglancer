@@ -97,6 +97,14 @@ const DEFAULT_DATA_SOURCES = exports.DEFAULT_DATA_SOURCES = [
       'neuroglancer/async_computation/decode_png',
     ],
   },
+  {
+    source: 'neuroglancer/datasource/zarr',
+    asyncComputation: [
+      'neuroglancer/async_computation/decode_gzip',
+      'neuroglancer/async_computation/decode_blosc',
+      // zstd not supported until numcodec 0.2.0. This requires update of typescript (I think, and much greater commitment)
+    ],
+  },
 ];
 
 const DEFAULT_SUPPORTED_LAYERS = exports.DEFAULT_SUPPORTED_LAYERS = [

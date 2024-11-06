@@ -155,3 +155,10 @@ function transformGBucket(url: string): string {
   }
   return url;
 }
+
+export function isNotFoundError(e: any) {
+  if (!(e instanceof HttpError)) return false;
+  // Treat CORS errors (0) or 403 as not found.  S3 returns 403 if the file does not exist because
+  // permissions are per-file.
+  return (e.status === 0 || e.status === 403 || e.status === 404);
+}
