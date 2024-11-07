@@ -27,7 +27,7 @@ const libraryEnv = {
 const pngModulePromise = (async () => {
   const response = await fetch(pngWasmDataUrl);
   const wasmCode = await response.arrayBuffer();
-  const m = await (window as any).WebAssembly.instantiate(wasmCode, {
+  const m = await (globalThis as any).WebAssembly.instantiate(wasmCode, {
     env: libraryEnv,
     wasi_snapshot_preview1: libraryEnv,
   });
